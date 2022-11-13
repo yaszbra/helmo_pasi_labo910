@@ -1,4 +1,6 @@
-on: main
+name: Docker Image CI + Vuln Check
+
+on: [push]
 
 jobs:
   build-secure-and-push:
@@ -6,16 +8,16 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - run: docker build . -t contoso.azurecr.io/k8sdemo:${{ github.sha }}
-      
-    - uses: Azure/container-scan@v0
-      with:
-        image-name: contoso.azurecr.io/k8sdemo:${{ github.sha }}
+    - run: docker build . -t ${{ secrets.CONTAINER_REGISTRY }}/python3:${{ github.sha }}
     
     - uses: Azure/docker-login@v1
       with:
-        login-server: contoso.azurecr.io
+        login-server: ${{ secrets.CONTAINER_REGISTRY }}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
-    - run: docker push contoso.azurecr.io/k8sdemo:${{ github.sha }}
+    - run: docker push ${{ secrets.CONTAINER_REGISTRY }}/python3:${{ github.sha }}
+    
+    - uses: Azure/container-scan@v0
+      with:
+        image-name: ${{ secrets.CONTAINER_REGISTRY }}/python3:${{ github.sha }}
