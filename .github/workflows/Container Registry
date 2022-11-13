@@ -1,5 +1,4 @@
 on: main
-
 jobs:
   build-secure-and-push:
     runs-on: ubuntu-latest
