@@ -19,3 +19,4 @@ jobs:
     - uses: azure/container-scan@v0
       with:
         image-name: my-image:my-tag
+    - run: docker push contoso.azurecr.io/k8sdemo:${{ github.sha }}
